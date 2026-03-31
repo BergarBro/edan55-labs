@@ -1,7 +1,7 @@
 \documentclass{tufte-handout}
 \usepackage{amsmath,amsthm}
 
-%\input{vc.tex}  % For version control
+\input{vc.tex}  % For version control
 
 \usepackage{booktabs}
 \usepackage{graphicx}
@@ -9,7 +9,7 @@
 
 \newtheorem{claim}{Claim}[section]
 \title{Treewidth}
-\date{}
+\date{\GITAuthorDate, rev. \GITAbrHash}
 \author{}
 
 \begin{document}
@@ -17,29 +17,20 @@
 
 Implement an algorithm for independent set using dynamic programming over a (given) tree-decomposition.
 
-\emph{Last time this exercise was tried, not all problems were resolved.}
+\emph{2017 is the second time we try this exercise. Not all problems from last year are resolved.}
 
 \subsection{The algorithm}
 
 The algorithm takes as input an unweighted, undirected graph $G$ and a tree-decomposition $T$ of $G$ with width $w$.
 A detailed explanation of the algorithm can be found in \emph{Tree Decompositions of Graphs}, Section 10.4 of Kleinberg and Tardos, \emph{Algorithms Design}, Addison--Wesley 2005.
-%
-You can also use the so-called \emph{nice tree decompositions}: 
-the implementation becomes much simpler and not necessarily 
-less efficient. See Section 7.3.1 of Cygan \emph{et al.}, 
-%Fomin, Kowalik, Lokshtanov, Marx, Pilipczuk, Pilipczuk, and Saurabh, 
-\emph{Parameterized algorithms} for the description of (a generalized version of) the 
-algorithm.
 
 The input files come in pairs with extension {\tt .td} and {\tt .gr}, respectively.
 The format is described in {\tt data/README.md}.
 
-You need to achieve a running time of $\exp(O(w))\operatorname{poly}(n)$; a straightforward 
-implementation of the pseudo-code in either of the books will achieve that.
-%, as analysed at the end of Section 10.4.
 
+You need to achieve a running time of $\exp(O(w))\operatorname{poly}(n)$; a straightforward implementation of the pseudo-code in the book will achieve that, as analysed at the end of Section 10.4.
 
-\paragraph{Some thoughts about implementation (from Thore Husfeldt).}
+\paragraph{My thoughts about implementation.}
 I parse both $G$ and $T$ as graphs.
 Note that the input representation of $T$ is just an undirected, connected graph without cycles, so we can pick any node as the root $r$ of the tree decomposition.
 From $r$, I perform a (very simple) graph traversal that allows me to associate with each node $t$ of $T$ the list of its children (in $T$) and a topological ordering.
