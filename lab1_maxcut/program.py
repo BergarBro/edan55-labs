@@ -61,12 +61,14 @@ def get_max_cut(n,m,weight,connection,A_B) :
 def main() :
     (n,m,weight,connection) = get_input()
     t = 100
-    algoritum = 0 # which algorithm to run, 0 = R, 1 = S, 2 = RS
-    for algoritum in range(3) :
+    algorithm = 0 # which algorithm to run, 0 = R, 1 = S, 2 = RS
+    names = ["R", "S", "RS"]
+    for algorithm in range(3) :
+        print("Algorithm " + names[algorithm])
         max_cut = 0
         agr_max_cut = 0
         for i in range(t) :
-            match algoritum :
+            match algorithm :
                 case 0:
                     (A,B) = alg_R(n)
                 case 1:
@@ -77,7 +79,7 @@ def main() :
             agr_max_cut += new_max_cut
             max_cut = max_cut if max_cut > new_max_cut else new_max_cut
             print(new_max_cut)
-        print("Avrage max_cut: " + str(agr_max_cut/t))
+        print("Average max_cut: " + str(agr_max_cut/t))
         print("Best max_cut: " + str(max_cut))
 
 main()
