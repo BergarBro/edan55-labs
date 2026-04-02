@@ -28,7 +28,9 @@ def alg_R(n) :
         A_B[round(random.random())][i+1] = 1
     return A_B
 
-def alg_S(n,m,weight,connection,A_B) :
+def alg_S(n,m,weight,connection,A_B = None) :
+    if A_B is None :
+        A_B = (list([0]*(n+1)),list([1]*(n+1)))
     i = 1
     while i <= n :
         value = 0
@@ -44,19 +46,38 @@ def alg_S(n,m,weight,connection,A_B) :
         i += 1
     return A_B
 
-def main() :
-    (n,m,weight,connection) = get_input()
-    (A,B) = alg_R(n)
-    # (A,B) = alg_S(n,m,weight,connection,(list([0]*(n+1)),list([1]*(n+1))))
-    (A,B) = alg_S(n,m,weight,connection,(A,B))
-    print(A)
-    print(B)
+def alg_RS(n,m,weight,connection) :
+    return alg_S(n,m,weight,connection,alg_R(n))
+
+def get_max_cut(n,m,weight,connection,A_B) :
     max_cut = 0
     for i in range(1,n+1) :
-        i_set = A if A[i] == 1 else B
+        i_set = A_B[0] if A_B[0][i] == 1 else A_B[1]
         for j in connection[i] :
             max_cut += weight[(i,j)] * (1 if i_set[j] != 1 else 0)
     max_cut /= 2    # Because I look throught all nodes, I double count the edges, so divide by 2
-    print(max_cut)
+    return max_cut
+
+def main() :
+    (n,m,weight,connection) = get_input()
+    t = 100
+    algoritum = 0 # which algorithm to run, 0 = R, 1 = S, 2 = RS
+    for algoritum in range(3) :
+        max_cut = 0
+        agr_max_cut = 0
+        for i in range(t) :
+            match algoritum :
+                case 0:
+                    (A,B) = alg_R(n)
+                case 1:
+                    (A,B) = alg_S(n,m,weight,connection)
+                case 2:
+                    (A,B) = alg_RS(n,m,weight,connection)
+            new_max_cut = get_max_cut(n,m,weight,connection,(A,B))
+            agr_max_cut += new_max_cut
+            max_cut = max_cut if max_cut > new_max_cut else new_max_cut
+            print(new_max_cut)
+        print("Avrage max_cut: " + str(agr_max_cut/t))
+        print("Best max_cut: " + str(max_cut))
 
 main()
