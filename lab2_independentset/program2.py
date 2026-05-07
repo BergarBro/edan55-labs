@@ -1,4 +1,4 @@
-# program.py
+# program2.py
 import random
 import sys
 
@@ -12,10 +12,8 @@ def get_input() :
     nodes = set()
     for i in range(1,n+1) :
         nodes.add(i)
-        dic[i] = set()
         for j, k in enumerate([int(m) for m in input().split()]) :
-            if k == 1 :
-                dic[i].add(j+1)
+            dic[(i,j+1)] = k
     
     return (n, nodes, dic)
 
@@ -23,31 +21,26 @@ def alg_R0(n, nodes, dic) :
     if len(nodes) == 0 :
         return 0
 
-    max_degree = 0
-    max_node = 0
+    max_degree = -1
+    node_max_degree = -1
+    degree = get_degree(nodes, dic)
     for i in nodes :
-        degree = len(dic[i])
-        if degree == 0 :
+        node_degree = degree(i)
+        if node_degree == 0 :
             nodes.remove(i)
             return 1 + alg_R0(n, nodes, dic)
         
-        if degree > max_degree :
-            max_node = i
-            max_degree = degree
+        if node_degree > max_degree :
+            node_max_degree = i
+            max_degree = node_degree
     
-    nodes.remove(max_node)
-    for j in dic[max_node] :
-        dic[j].remove(max_node)
+    nodes.remove(node_max_degree)
+    nodes_without_neighbors = nodes.copy()
+    for j in nodes :
+        if dic[(node_max_degree,j)] == 1 :
+            nodes_without_neighbors.remove(j)
     
-    dic_neighbors = {key: set(value) for key, value in dic.items()}
-    nodes_neighbors = nodes.copy()
-    for k in dic[max_node] :
-        nodes_neighbors.remove(k)
-        for l in dic[k] :
-            dic_neighbors[l].remove(k)
-    dic[max_node] = set()
-    dic_neighbors[max_node] = set()
-    return max(1 + alg_R0(n, nodes_neighbors, dic_neighbors), alg_R0(n, nodes, dic))
+    return max(1 + alg_R0(n, nodes_without_neighbors, dic), alg_R0(n, nodes, dic))
 
 def alg_R1(n, nodes, dic) :
     if len(nodes) == 0 :
@@ -94,12 +87,22 @@ def alg_R1(n, nodes, dic) :
     dic_neighbors[max_node] = set()
     return max(1 + alg_R1(n, nodes_neighbors, dic_neighbors), alg_R1(n, nodes, dic))
 
+def get_degree(nodes, dic) :
+    degree = {}
+    for i in nodes :
+        degree[i] = 0
+        for j in nodes :
+            degree[i] += dic[(i,j)]
+    return degree
+
 def main() :
     (n, nodes, dic) = get_input()
     # print(n)
     print(dic)
+    degree = get_degree(nodes, dic)
+    print(degree)
     # print(nodes)
-    max_size = alg_R1(n, nodes, dic)
+    max_size = alg_R0(n, nodes, dic)
     print(max_size)
 
 
