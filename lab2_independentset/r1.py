@@ -74,11 +74,6 @@ def get_degree(nodes, dic, look_for_degree_0, look_for_degree_1, look_for_degree
 
 def main() :
     (n, nodes, dic) = get_input()
-    # print(n)
-    #print(dic)
-    #degree = get_degree(nodes, dic, True, True, True)
-    #print(degree)
-    # print(nodes)
     max_size, rec_calls = alg_R1(nodes, dic)
     print(n, max_size, rec_calls, round(math.log(rec_calls),1))
 
